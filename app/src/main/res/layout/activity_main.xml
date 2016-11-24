@@ -40,16 +40,23 @@
         android:id="@+id/tx_button"
         android:layout_weight="1" />
 
+    <TextView
+        android:text="RX"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rxTextView"
+        android:textAppearance="@android:style/TextAppearance.Material.Large" />
+
+    <com.jjoe64.graphview.GraphView
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
+        android:id="@+id/graph" />
+
     <ToggleButton
         android:text="FFT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/fft_button"
         android:layout_weight="1" />
-
-    <com.jjoe64.graphview.GraphView
-        android:layout_width="match_parent"
-        android:layout_height="200dip"
-        android:id="@+id/graph" />
 
 </LinearLayout>

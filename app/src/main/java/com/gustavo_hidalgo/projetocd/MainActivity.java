@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EditText mMessageEditText;
     Button mTxButton, mMessageButton;
     ToggleButton mFftButton;
+    TextView mRxTextView;
     AudioGenerator mAudioGenerator;
     ArrayList<double[]> mMessageModulated;
     SpectrumAnalyser mSpectrumAnalyser;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
         mMessageButton = (Button) findViewById(R.id.message_button);
         mTxButton = (Button) findViewById(R.id.tx_button);
+        mRxTextView = (TextView) findViewById(R.id.rxTextView);
         mFftButton = (ToggleButton) findViewById(R.id.fft_button);
         mGraph = (GraphView) findViewById(R.id.graph);
         mAudioGenerator = new AudioGenerator(mSamples);
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mGraph.getViewport().setXAxisBoundsManual(true);
         mGraph.getViewport().setMinX(0);
         mGraph.getViewport().setMaxX(255);
+        mGraph.getViewport().
         mGraph.addSeries(mLineGraphSeries);
 
         if (ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)
