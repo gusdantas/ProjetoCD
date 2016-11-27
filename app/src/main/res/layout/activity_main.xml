@@ -40,12 +40,57 @@
         android:id="@+id/tx_button"
         android:layout_weight="1" />
 
-    <TextView
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="F0"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/f0_textView"
+            android:layout_weight="1"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            android:maxLength="6"
+            android:maxLines="1" />
+
+        <TextView
+            android:text="F0 max"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/f0max_textView"
+            android:layout_weight="1"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            android:maxLength="6"
+            android:maxLines="1" />
+
+        <TextView
+            android:text="F1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/f1_textView"
+            android:layout_weight="1"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            android:maxLength="6"
+            android:maxLines="1" />
+
+        <TextView
+            android:text="F1 max"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/f1max_textView"
+            android:layout_weight="1"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            android:maxLines="1"
+            android:maxLength="6" />
+    </LinearLayout>
+
+    <ToggleButton
         android:text="RX"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rxTextView"
-        android:textAppearance="@android:style/TextAppearance.Material.Large" />
+        android:id="@+id/rx_toggleButton" />
 
     <com.jjoe64.graphview.GraphView
         android:layout_width="match_parent"
