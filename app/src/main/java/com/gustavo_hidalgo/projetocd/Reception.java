@@ -22,7 +22,7 @@ public class Reception extends AsyncTask<Void, DataPoint[], Boolean> {
     AudioRecord mAudioRecorder;
     DataPoint[] mDataPoints;
     int counter = 0;
-    int mBlockSize = 256;
+    int mBlockSize;
     int mBufferSize, mBufferReadResult;
     //int mFrequency = 44100;
     int mChannelConfiguration = AudioFormat.CHANNEL_IN_MONO;
@@ -34,8 +34,9 @@ public class Reception extends AsyncTask<Void, DataPoint[], Boolean> {
     public static final String TAG = "[ProjCD] Reception";
 
 
-    public Reception(ReceptionInterface receptionInterface){
+    public Reception(int blockSize, ReceptionInterface receptionInterface){
         this.mReceptionInterface = receptionInterface;
+        this.mBlockSize = blockSize;
         this.mDataPoints = new DataPoint[mBlockSize];
     }
 

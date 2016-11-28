@@ -21,26 +21,28 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    EditText mMessageEditText, mF0EditText, mF1EditText, mSamplesEditText;
+    EditText mMessageEditText, mF0ChannelEditText, mF1ChannelEditText, mBlkSizeEditText, mSamplesEditText;
     Button mTxButton, mMessageButton;
     ToggleButton mFftButton, mRxButton;
-    TextView mF0Rx, mF0RxMax, mF1Rx, mF1RxMax;
+    TextView mF0Tx, mF1Tx, mTxTimeTv, mF0Rx, mF0RxMax, mF1Rx, mF1RxMax;
     AudioGenerator mAudioGenerator;
     ArrayList<double[]> mMessageModulated;
     SpectrumAnalyser mSpectrumAnalyser;
     Reception mReception;
     GraphView mGraph;
     LineGraphSeries<DataPoint> mLineGraphSeries;
-    int mF0Counter, mF1Counter;
+    int mF0Counter, mF1Counter, mF0, mF1;
+    double mTxTime;
     int[] mMessage = {0};
 
     final private int PERMISSION = 1;
     double mF0MaxValue, mF0ActualValue, mF1MaxValue, mF1ActualValue = 0;
-    public int mF0Blk = 220;
-    public int mF1Blk = 230;
+    public int mF0Channel = 220;
+    public int mF1Channel = 230;
     public int mBlockSize = 256;
     public int mSamples = 22050; //500ms
     public static final int mSampleRate = 44100;
+    public static final int mBandRate = mSampleRate/2;
 
 
     @Override
@@ -52,19 +54,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initialize(){
-        mF0EditText = (EditText) findViewById(R.id.f0_editText);
-        mF1EditText = (EditText) findViewById(R.id.f1_editText);
-        mSamplesEditText = (EditText) findViewById(R.id.samples_editText);
+        mF0ChannelEditText = (EditText) findViewById(R.id.f0Channel_editText);
+        mF1ChannelEditText = (EditText) findViewById(R.id.f1Channel_editText);
+        mBlkSizeEditText = (EditText) findViewById(R.id.blockSize_editText);
+        mSamplesEditText = (EditText) findViewById(R.id.bitTxSamples_editText);
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
         mMessageButton = (Button) findViewById(R.id.message_button);
+        mF0Tx = (TextView) findViewById(R.id.f0tx_textView);
+        mF1Tx = (TextView) findViewById(R.id.f1tx_textView);
+        mTxTimeTv = (TextView) findViewById(R.id.bitTxTime_textView);
         mTxButton = (Button) findViewById(R.id.tx_button);
         mF0Rx = (TextView) findViewById(R.id.f0_textView);
         mF0RxMax = (TextView) findViewById(R.id.f0max_textView);
         mF1Rx = (TextView) findViewById(R.id.f1_textView);
         mF1RxMax = (TextView) findViewById(R.id.f1max_textView);
-        mFftButton = (ToggleButton) findViewById(R.id.fft_button);
         mRxButton = (ToggleButton) findViewById(R.id.rx_toggleButton);
         mGraph = (GraphView) findViewById(R.id.graph);
+        mFftButton = (ToggleButton) findViewById(R.id.fft_button);
+
         mAudioGenerator = new AudioGenerator(mSampleRate);
         mMessageModulated = new ArrayList<>();
         mLineGraphSeries = new LineGraphSeries<>();
@@ -75,10 +82,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mGraph.getViewport().setMinX(0);
         mGraph.getViewport().setMaxX(255);
         mGraph.addSeries(mLineGraphSeries);
-
-        mF0EditText.setText(String.valueOf(mF0Blk));
-        mF1EditText.setText(String.valueOf(mF1Blk));
-        mSamplesEditText.setText(String.valueOf(mSamples));
+        mF0 = (mBandRate/mBlockSize)*mF0Channel;
+        mF1 = (mBandRate/mBlockSize)*mF1Channel;
+        mTxTime = (double) mSamples/mSampleRate;
+        updateUI();
 
         if (ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED ||
@@ -94,18 +101,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mMessageButton.setOnClickListener(this);
         mTxButton.setOnClickListener(this);
-
         mRxButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     mF0Counter = mF1Counter = 0;
-                    mReception = new Reception(new ReceptionInterface() {
+                    mReception = new Reception(mBlockSize, new ReceptionInterface() {
                         @Override
                         public void onPublishProgress(DataPoint[]... values) {
-                            mF0ActualValue = values[0][210].getY();
+                            mF0ActualValue = values[0][mF0Channel].getY();
                             mF0Rx.setText(String.valueOf(mF0ActualValue));
-                            mF1ActualValue = values[0][220].getY();
+                            mF1ActualValue = values[0][mF1Channel].getY();
                             mF1Rx.setText(String.valueOf(mF1ActualValue));
                             /*mF0MaxValue = Math.max(mF0MaxValue,mF0ActualValue);
                             mF0RxMax.setText(String.valueOf(mF0MaxValue));
@@ -153,6 +159,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    private void updateUI() {
+        mF0ChannelEditText.setText(String.valueOf(mF0Channel));
+        mF1ChannelEditText.setText(String.valueOf(mF1Channel));
+        mBlkSizeEditText.setText(String.valueOf(mBlockSize));
+        mSamplesEditText.setText(String.valueOf(mSamples));
+        mF0Tx.setText(String.valueOf(mF0));
+        mF1Tx.setText(String.valueOf(mF1));
+        mTxTimeTv.setText(String.valueOf(mTxTime));
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -165,9 +181,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 for (int i = 0; i < split.length-1; i++) {
                     mMessage[i] = Integer.parseInt(split[i+1]);
                 }
-                mF0Blk = Integer.parseInt(mF0EditText.getText().toString());
-                mF1Blk = Integer.parseInt(mF1EditText.getText().toString());
+                mF0Channel = Integer.parseInt(mF0ChannelEditText.getText().toString());
+                mF1Channel = Integer.parseInt(mF1ChannelEditText.getText().toString());
+                mBlockSize = Integer.parseInt(mBlkSizeEditText.getText().toString());
                 mSamples = Integer.parseInt(mSamplesEditText.getText().toString());
+                mF0 = (mBandRate/mBlockSize)*mF0Channel;
+                mF1 = (mBandRate/mBlockSize)*mF1Channel;
+                mTxTime = (mSamples/mSampleRate);
+                updateUI();
                 break;
         }
     }
@@ -176,9 +197,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int bit : message) {
             int frequency;
             if (bit == 0){
-                frequency = (mSampleRate/mBlockSize)*mF0Blk;
+                frequency = mF0;
             } else {
-                frequency = (mSampleRate/mBlockSize)*mF1Blk;
+                frequency = mF1;
             }
             mMessageModulated.add(mAudioGenerator.getSineWave(mSamples, mSampleRate, frequency));
         }
