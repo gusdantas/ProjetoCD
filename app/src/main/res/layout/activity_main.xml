@@ -18,6 +18,43 @@
 
         <EditText
             android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/f0_editText"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="F0" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/f1_editText"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="F1" />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/samples_editText"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="Sample rate" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"

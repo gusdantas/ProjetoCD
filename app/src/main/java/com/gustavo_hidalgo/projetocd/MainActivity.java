@@ -21,7 +21,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    EditText mMessageEditText;
+    EditText mMessageEditText, mF0EditText, mF1EditText, mSamplesEditText;
     Button mTxButton, mMessageButton;
     ToggleButton mFftButton, mRxButton;
     TextView mF0Rx, mF0RxMax, mF1Rx, mF1RxMax;
@@ -31,13 +31,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Reception mReception;
     GraphView mGraph;
     LineGraphSeries<DataPoint> mLineGraphSeries;
+    int mF0Counter, mF1Counter;
     int[] mMessage = {0};
+
     final private int PERMISSION = 1;
     double mF0MaxValue, mF0ActualValue, mF1MaxValue, mF1ActualValue = 0;
-    public static final int m0Frequency = 18949;
-    public static final int m1Frequency = 19811;
+    public int mF0Blk = 220;
+    public int mF1Blk = 230;
+    public int mBlockSize = 256;
+    public int mSamples = 22050; //500ms
     public static final int mSampleRate = 44100;
-    public static final int mSamples = 22050; //500ms
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initialize(){
+        mF0EditText = (EditText) findViewById(R.id.f0_editText);
+        mF1EditText = (EditText) findViewById(R.id.f1_editText);
+        mSamplesEditText = (EditText) findViewById(R.id.samples_editText);
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
         mMessageButton = (Button) findViewById(R.id.message_button);
         mTxButton = (Button) findViewById(R.id.tx_button);
@@ -69,6 +76,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mGraph.getViewport().setMaxX(255);
         mGraph.addSeries(mLineGraphSeries);
 
+        mF0EditText.setText(String.valueOf(mF0Blk));
+        mF1EditText.setText(String.valueOf(mF1Blk));
+        mSamplesEditText.setText(String.valueOf(mSamples));
+
         if (ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO)
@@ -88,17 +99,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
+                    mF0Counter = mF1Counter = 0;
                     mReception = new Reception(new ReceptionInterface() {
                         @Override
                         public void onPublishProgress(DataPoint[]... values) {
-                            mF0ActualValue = values[0][220].getY();
+                            mF0ActualValue = values[0][210].getY();
                             mF0Rx.setText(String.valueOf(mF0ActualValue));
-                            mF1ActualValue = values[0][230].getY();
+                            mF1ActualValue = values[0][220].getY();
                             mF1Rx.setText(String.valueOf(mF1ActualValue));
-                            mF0MaxValue = Math.max(mF0MaxValue,mF0ActualValue);
+                            /*mF0MaxValue = Math.max(mF0MaxValue,mF0ActualValue);
                             mF0RxMax.setText(String.valueOf(mF0MaxValue));
                             mF1MaxValue = Math.max(mF1MaxValue,mF1ActualValue);
-                            mF1RxMax.setText(String.valueOf(mF1MaxValue));
+                            mF1RxMax.setText(String.valueOf(mF1MaxValue));*/
+                            if(mF0ActualValue > 10){
+                                mF0RxMax.setText(String.valueOf(mF0Counter++));
+                            } else if(mF1ActualValue > 10){
+                                mF1RxMax.setText(String.valueOf(mF1Counter++));
+                            }
                         }
 
                         @Override
@@ -148,6 +165,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 for (int i = 0; i < split.length-1; i++) {
                     mMessage[i] = Integer.parseInt(split[i+1]);
                 }
+                mF0Blk = Integer.parseInt(mF0EditText.getText().toString());
+                mF1Blk = Integer.parseInt(mF1EditText.getText().toString());
+                mSamples = Integer.parseInt(mSamplesEditText.getText().toString());
                 break;
         }
     }
@@ -156,12 +176,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int bit : message) {
             int frequency;
             if (bit == 0){
-                frequency = m0Frequency;
+                frequency = (mSampleRate/mBlockSize)*mF0Blk;
             } else {
-                frequency = m1Frequency;
+                frequency = (mSampleRate/mBlockSize)*mF1Blk;
             }
             mMessageModulated.add(mAudioGenerator.getSineWave(mSamples, mSampleRate, frequency));
         }
+        mMessageModulated.add(mAudioGenerator.getSineWave(mSamples, mSampleRate, 0));
         mAudioGenerator.createPlayer();
         for (double[] bitModulated:mMessageModulated) {
             mAudioGenerator.writeSound(bitModulated);

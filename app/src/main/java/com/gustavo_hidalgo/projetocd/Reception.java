@@ -20,12 +20,11 @@ import ca.uol.aig.fftpack.RealDoubleFFT;
 public class Reception extends AsyncTask<Void, DataPoint[], Boolean> {
     RealDoubleFFT mFFTransformer;
     AudioRecord mAudioRecorder;
-    //ArrayList<DataPoint> mDataPoints;
     DataPoint[] mDataPoints;
     int counter = 0;
     int mBlockSize = 256;
     int mBufferSize, mBufferReadResult;
-    int mFrequency = 44100;
+    //int mFrequency = 44100;
     int mChannelConfiguration = AudioFormat.CHANNEL_IN_MONO;
     int mAudioEncoding = AudioFormat.ENCODING_PCM_16BIT;
     boolean mStarted = true;
@@ -43,14 +42,13 @@ public class Reception extends AsyncTask<Void, DataPoint[], Boolean> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mBufferSize = AudioRecord.getMinBufferSize(mFrequency, mChannelConfiguration, mAudioEncoding);
-        mAudioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, mFrequency,
+        mBufferSize = AudioRecord.getMinBufferSize(MainActivity.mSampleRate, mChannelConfiguration,
+                mAudioEncoding);
+        mAudioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, MainActivity.mSampleRate,
                 mChannelConfiguration, mAudioEncoding, mBufferSize);
         mBuffer = new short[mBlockSize];
         mTransformed = new double[mBlockSize];
         mFFTransformer = new RealDoubleFFT(mBlockSize);
-        //mDataPoints = new DataPoint[mBlockSize];
-
     }
 
     @Override

@@ -60,5 +60,4 @@ public class AudioGenerator {
         audioTrack.stop();
         audioTrack.release();
     }
-
 }
