@@ -173,7 +173,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tx_button:
-                tx(mMessage);
+                if(mMessage != null) {
+                    tx(mMessage);
+                }
                 break;
             case R.id.message_button:
                 String[] split = mMessageEditText.getText().toString().split("");
@@ -187,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mSamples = Integer.parseInt(mSamplesEditText.getText().toString());
                 mF0 = (mBandRate/mBlockSize)*mF0Channel;
                 mF1 = (mBandRate/mBlockSize)*mF1Channel;
-                mTxTime = (mSamples/mSampleRate);
+                mTxTime = (double) mSamples/mSampleRate;
                 updateUI();
                 break;
         }
