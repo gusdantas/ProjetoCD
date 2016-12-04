@@ -11,182 +11,202 @@
     tools:context="com.gustavo_hidalgo.projetocd.MainActivity"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/f0Channel_editText"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:text="F0 ch"
-            android:maxLines="1" />
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/f1Channel_editText"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:text="F1 ch" />
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/blockSize_editText"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:text="Blk Size" />
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/bitTxSamples_editText"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:text="Bit TX samples" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <EditText
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/messageEditText"
-            android:hint="Insert the message"
-            android:layout_weight="2"
-            android:singleLine="true" />
+            android:orientation="vertical" >
 
-        <Button
-            android:text="SET"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/message_button" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    </LinearLayout>
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/f0Channel_editText"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:text="F0 ch"
+                    android:maxLines="1" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/f1Channel_editText"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:text="F1 ch" />
 
-        <TextView
-            android:text="F0"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/f0tx_textView"
-            android:layout_weight="1"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium"
-            android:maxLines="1"
-            android:maxLength="6" />
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/blockSize_editText"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:text="Blk Size" />
 
-        <TextView
-            android:text="F1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/f1tx_textView"
-            android:layout_weight="1"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium"
-            android:maxLines="1"
-            android:maxLength="6" />
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/bitTxSamples_editText"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:text="Bit TX samples" />
 
-        <TextView
-            android:text="Bit TX time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/bitTxTime_textView"
-            android:layout_weight="1"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium"
-            android:maxLines="1"
-            android:maxLength="6" />
-    </LinearLayout>
+            </LinearLayout>
 
-    <Button
-        android:text="TX"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tx_button"
-        android:layout_weight="1" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/messageTxEditText"
+                    android:hint="Insert the message"
+                    android:layout_weight="2"
+                    android:singleLine="true" />
 
-        <TextView
-            android:text="F0"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/f0_textView"
-            android:layout_weight="1"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium"
-            android:maxLength="6"
-            android:maxLines="1" />
+                <Button
+                    android:text="SET"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/message_button" />
 
-        <TextView
-            android:text="F0 max"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/f0max_textView"
-            android:layout_weight="1"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium"
-            android:maxLength="6"
-            android:maxLines="1" />
+            </LinearLayout>
 
-        <TextView
-            android:text="F1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/f1_textView"
-            android:layout_weight="1"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium"
-            android:maxLength="6"
-            android:maxLines="1" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <TextView
-            android:text="F1 max"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/f1max_textView"
-            android:layout_weight="1"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium"
-            android:maxLines="1"
-            android:maxLength="6" />
-    </LinearLayout>
+                <TextView
+                    android:text="F0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/f0tx_textView"
+                    android:layout_weight="1"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                    android:maxLines="1"
+                    android:maxLength="6" />
 
-    <ToggleButton
-        android:text="RX"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/rx_toggleButton" />
+                <TextView
+                    android:text="F1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/f1tx_textView"
+                    android:layout_weight="1"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                    android:maxLines="1"
+                    android:maxLength="6" />
 
-    <com.jjoe64.graphview.GraphView
-        android:layout_width="match_parent"
-        android:layout_height="200dip"
-        android:id="@+id/graph" />
+                <TextView
+                    android:text="Bit TX time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/bitTxTime_textView"
+                    android:layout_weight="1"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                    android:maxLines="1"
+                    android:maxLength="6" />
+            </LinearLayout>
 
-    <ToggleButton
-        android:text="FFT"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/fft_button"
-        android:layout_weight="1" />
+            <Button
+                android:text="TX"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tx_button"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:text="F0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/f0_textView"
+                    android:layout_weight="1"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                    android:maxLength="6"
+                    android:maxLines="1" />
+
+                <TextView
+                    android:text="F0 max"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/f0max_textView"
+                    android:layout_weight="1"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                    android:maxLength="6"
+                    android:maxLines="1" />
+
+                <TextView
+                    android:text="F1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/f1_textView"
+                    android:layout_weight="1"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                    android:maxLength="6"
+                    android:maxLines="1" />
+
+                <TextView
+                    android:text="F1 max"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/f1max_textView"
+                    android:layout_weight="1"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                    android:maxLines="1"
+                    android:maxLength="6" />
+
+            </LinearLayout>
+
+            <TextView
+                android:text="Message Received"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/messageRxTextView"
+                android:layout_weight="1"
+                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+            <ToggleButton
+                android:text="RX"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rx_toggleButton" />
+
+            <com.jjoe64.graphview.GraphView
+                android:layout_width="match_parent"
+                android:layout_height="200dip"
+                android:id="@+id/graph" />
+
+            <ToggleButton
+                android:text="FFT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/fft_button"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

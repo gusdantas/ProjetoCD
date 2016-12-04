@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 
 public interface ReceptionInterface {
+    void onPreExecute();
     void onPublishProgress(DataPoint[]... values);
     void onCancelled();
 }

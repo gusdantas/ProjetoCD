@@ -50,6 +50,7 @@ public class Reception extends AsyncTask<Void, DataPoint[], Boolean> {
         mBuffer = new short[mBlockSize];
         mTransformed = new double[mBlockSize];
         mFFTransformer = new RealDoubleFFT(mBlockSize);
+        mReceptionInterface.onPreExecute();
     }
 
     @Override

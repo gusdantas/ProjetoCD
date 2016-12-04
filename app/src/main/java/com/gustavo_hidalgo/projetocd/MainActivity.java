@@ -19,27 +19,30 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    EditText mMessageEditText, mF0ChannelEditText, mF1ChannelEditText, mBlkSizeEditText, mSamplesEditText;
+    EditText mMessageTxEditText, mF0ChannelEditText, mF1ChannelEditText, mBlkSizeEditText, mSamplesEditText;
     Button mTxButton, mMessageButton;
     ToggleButton mFftButton, mRxButton;
-    TextView mF0Tx, mF1Tx, mTxTimeTv, mF0Rx, mF0RxMax, mF1Rx, mF1RxMax;
+    TextView mMessageRxEditText, mF0Tx, mF1Tx, mTxTimeTv, mF0Rx, mF0RxMax, mF1Rx, mF1RxMax;
     AudioGenerator mAudioGenerator;
     ArrayList<double[]> mMessageModulated;
     SpectrumAnalyser mSpectrumAnalyser;
     Reception mReception;
     GraphView mGraph;
     LineGraphSeries<DataPoint> mLineGraphSeries;
+    Timer mTimer;
     int mF0Counter, mF1Counter, mF0, mF1;
     double mTxTime;
-    int[] mMessage = {0};
+    int[] mMessageTx = {0};
+    StringBuilder mMessageRx;
 
     final private int PERMISSION = 1;
     double mF0MaxValue, mF0ActualValue, mF1MaxValue, mF1ActualValue = 0;
-    public int mF0Channel = 220;
-    public int mF1Channel = 230;
-    public int mBlockSize = 256;
+    public int mF0Channel = 1900;
+    public int mF1Channel = 1910;
+    public int mBlockSize = 2205;
     public int mSamples = 22050; //500ms
     public static final int mSampleRate = 44100;
     public static final int mBandRate = mSampleRate/2;
@@ -58,7 +61,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mF1ChannelEditText = (EditText) findViewById(R.id.f1Channel_editText);
         mBlkSizeEditText = (EditText) findViewById(R.id.blockSize_editText);
         mSamplesEditText = (EditText) findViewById(R.id.bitTxSamples_editText);
-        mMessageEditText = (EditText) findViewById(R.id.messageEditText);
+        mMessageTxEditText = (EditText) findViewById(R.id.messageTxEditText);
+        mMessageRxEditText = (TextView) findViewById(R.id.messageRxTextView);
+
         mMessageButton = (Button) findViewById(R.id.message_button);
         mF0Tx = (TextView) findViewById(R.id.f0tx_textView);
         mF1Tx = (TextView) findViewById(R.id.f1tx_textView);
@@ -72,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mGraph = (GraphView) findViewById(R.id.graph);
         mFftButton = (ToggleButton) findViewById(R.id.fft_button);
 
+        mMessageRx = new StringBuilder();
         mAudioGenerator = new AudioGenerator(mSampleRate);
         mMessageModulated = new ArrayList<>();
         mLineGraphSeries = new LineGraphSeries<>();
@@ -108,6 +114,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mF0Counter = mF1Counter = 0;
                     mReception = new Reception(mBlockSize, new ReceptionInterface() {
                         @Override
+                        public void onPreExecute() {
+                            //mMessageRx.delete(0,mMessageRx.length()-1);
+                            mTimer = new Timer();
+                            mTimer.schedule(new SyncReceptor(new SyncReceptorInterface() {
+                                @Override
+                                public void confirmBit() {
+                                    if (mF0Counter > mF1Counter){
+                                        mMessageRx.append(0);
+                                    } else if (mF0Counter < mF1Counter){
+                                        mMessageRx.append(1);
+                                    }
+                                    mF0Counter = mF1Counter = 0;
+                                }
+                            }), 0, 500);
+                        }
+
+                        @Override
                         public void onPublishProgress(DataPoint[]... values) {
                             mF0ActualValue = values[0][mF0Channel].getY();
                             mF0Rx.setText(String.valueOf(mF0ActualValue));
@@ -117,15 +140,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             mF0RxMax.setText(String.valueOf(mF0MaxValue));
                             mF1MaxValue = Math.max(mF1MaxValue,mF1ActualValue);
                             mF1RxMax.setText(String.valueOf(mF1MaxValue));*/
+
                             if(mF0ActualValue > 10){
                                 mF0RxMax.setText(String.valueOf(mF0Counter++));
                             } else if(mF1ActualValue > 10){
                                 mF1RxMax.setText(String.valueOf(mF1Counter++));
                             }
+                            mMessageRxEditText.setText(mMessageRx);
                         }
 
                         @Override
                         public void onCancelled() {
+                            mMessageRx.delete(0,mMessageRx.length());
+                            mTimer.cancel();
+                            mTimer.purge();
+                            mTimer = null;
                         }
                     });
                     mReception.execute();
@@ -173,15 +202,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tx_button:
-                if(mMessage != null) {
-                    tx(mMessage);
+                if(mMessageTx != null) {
+                    tx(mMessageTx);
                 }
                 break;
             case R.id.message_button:
-                String[] split = mMessageEditText.getText().toString().split("");
-                mMessage = new int[split.length-1];
+                String[] split = mMessageTxEditText.getText().toString().split("");
+                mMessageTx = new int[split.length-1];
                 for (int i = 0; i < split.length-1; i++) {
-                    mMessage[i] = Integer.parseInt(split[i+1]);
+                    mMessageTx[i] = Integer.parseInt(split[i+1]);
                 }
                 mF0Channel = Integer.parseInt(mF0ChannelEditText.getText().toString());
                 mF1Channel = Integer.parseInt(mF1ChannelEditText.getText().toString());
