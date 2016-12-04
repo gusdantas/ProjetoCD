@@ -8,49 +8,45 @@ import android.util.Log;
 
 import com.jjoe64.graphview.series.DataPoint;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ca.uol.aig.fftpack.RealDoubleFFT;
 
 /**
  * Created by hdant on 19/11/2016.
  */
 
-public class Reception extends AsyncTask<Void, DataPoint[], Boolean> {
+public class Receptor extends AsyncTask<Void, DataPoint[], Boolean> {
     RealDoubleFFT mFFTransformer;
     AudioRecord mAudioRecorder;
     DataPoint[] mDataPoints;
     int counter = 0;
-    int mBlockSize;
-    int mBufferSize, mBufferReadResult;
-    //int mFrequency = 44100;
+    int mBufferSize, mBufferReadResult, mBlockSize, mRxGain;
     int mChannelConfiguration = AudioFormat.CHANNEL_IN_MONO;
     int mAudioEncoding = AudioFormat.ENCODING_PCM_16BIT;
     boolean mStarted = true;
     short[] mBuffer;
     double[] mTransformed;
-    ReceptionInterface mReceptionInterface;
-    public static final String TAG = "[ProjCD] Reception";
+    ReceptorInterface mReceptorInterface;
+    public static final String TAG = "[ProjCD] Receptor";
 
 
-    public Reception(int blockSize, ReceptionInterface receptionInterface){
-        this.mReceptionInterface = receptionInterface;
+    public Receptor(int blockSize, int rxGain, ReceptorInterface receptorInterface){
+        this.mReceptorInterface = receptorInterface;
         this.mBlockSize = blockSize;
+        this.mRxGain = rxGain;
         this.mDataPoints = new DataPoint[mBlockSize];
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mBufferSize = AudioRecord.getMinBufferSize(MainActivity.mSampleRate, mChannelConfiguration,
+        mBufferSize = AudioRecord.getMinBufferSize(TxRxActivity.mSampleRate, mChannelConfiguration,
                 mAudioEncoding);
-        mAudioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, MainActivity.mSampleRate,
+        mAudioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, TxRxActivity.mSampleRate,
                 mChannelConfiguration, mAudioEncoding, mBufferSize);
         mBuffer = new short[mBlockSize];
         mTransformed = new double[mBlockSize];
         mFFTransformer = new RealDoubleFFT(mBlockSize);
-        mReceptionInterface.onPreExecute();
+        mReceptorInterface.onPreExecute();
     }
 
     @Override
@@ -72,7 +68,7 @@ public class Reception extends AsyncTask<Void, DataPoint[], Boolean> {
                 }
                 mFFTransformer.ft(mTransformed);
                 for (int i = 0; i < mBlockSize; i++) {
-                    mDataPoints[i] = new DataPoint((double) i, Math.abs(10 * mTransformed[i]));
+                    mDataPoints[i] = new DataPoint((double) i, Math.abs(mRxGain * mTransformed[i]));
                 }
                 Log.d(TAG, String.valueOf(counter++));
                 if(mBufferReadResult == mBlockSize) {
@@ -86,13 +82,13 @@ public class Reception extends AsyncTask<Void, DataPoint[], Boolean> {
     @Override
     protected void onProgressUpdate(DataPoint[]... values) {
         super.onProgressUpdate(values);
-        mReceptionInterface.onPublishProgress(values);
+        mReceptorInterface.onPublishProgress(values);
     }
 
     @Override
     protected void onCancelled() {
         super.onCancelled();
         mAudioRecorder.release();
-        mReceptionInterface.onCancelled();
+        mReceptorInterface.onCancelled();
     }
 }

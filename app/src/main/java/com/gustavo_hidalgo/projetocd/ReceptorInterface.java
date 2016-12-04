@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by hdant on 19/11/2016.
  */
 
-public interface ReceptionInterface {
+public interface ReceptorInterface {
     void onPreExecute();
     void onPublishProgress(DataPoint[]... values);
     void onCancelled();

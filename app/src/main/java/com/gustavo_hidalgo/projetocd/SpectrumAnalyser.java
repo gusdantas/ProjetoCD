@@ -19,9 +19,9 @@ public class SpectrumAnalyser extends AsyncTask<Void, DataPoint[], Boolean> {
     AudioRecord mAudioRecorder;
     DataPoint[] mDataPoints;
     int counter = 0;
-    int mBlockSize = 256;
-    int mBufferSize, mBufferReadResult;
-    int mFrequency = 44100;
+    int mBlockSize = 441;
+    int mSampleRate = TxRxActivity.mSampleRate;
+    int mBufferSize, mBufferReadResult, mRxGain;
     int mChannelConfiguration = AudioFormat.CHANNEL_IN_MONO;
     int mAudioEncoding = AudioFormat.ENCODING_PCM_16BIT;
     boolean mStarted = true;
@@ -31,15 +31,17 @@ public class SpectrumAnalyser extends AsyncTask<Void, DataPoint[], Boolean> {
     public static final String TAG = "[ProjCD] SpecAnalyser";
 
 
-    public SpectrumAnalyser(SpectrumAnalyserInterface spectrumAnalyserInterface){
+    public SpectrumAnalyser(int rxGain, SpectrumAnalyserInterface spectrumAnalyserInterface){
         this.mSpectrumAnalyserInterface = spectrumAnalyserInterface;
+        this.mRxGain = rxGain;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mBufferSize = AudioRecord.getMinBufferSize(mFrequency, mChannelConfiguration, mAudioEncoding);
-        mAudioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, mFrequency,
+        mBufferSize = AudioRecord.getMinBufferSize(mSampleRate, mChannelConfiguration,
+                mAudioEncoding);
+        mAudioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, mSampleRate,
                 mChannelConfiguration, mAudioEncoding, mBufferSize);
         mBuffer = new short[mBlockSize];
         mTransformed = new double[mBlockSize];
@@ -66,7 +68,7 @@ public class SpectrumAnalyser extends AsyncTask<Void, DataPoint[], Boolean> {
                 }
                 mFFTransformer.ft(mTransformed);
                 for (int i = 0; i < mBlockSize; i++) {
-                    mDataPoints[i] = new DataPoint((double) i, Math.abs(10 * mTransformed[i]));
+                    mDataPoints[i] = new DataPoint((double) i, Math.abs(mRxGain * mTransformed[i]));
                 }
                 Log.d(TAG, String.valueOf(counter++));
                 publishProgress(mDataPoints);
