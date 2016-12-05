@@ -14,24 +14,24 @@ import ca.uol.aig.fftpack.RealDoubleFFT;
  * Created by hdant on 19/11/2016.
  */
 
-public class SpectrumAnalyser extends AsyncTask<Void, DataPoint[], Boolean> {
-    RealDoubleFFT mFFTransformer;
-    AudioRecord mAudioRecorder;
-    DataPoint[] mDataPoints;
-    int counter = 0;
-    int mBlockSize = 441;
+class SpectrumAnalyser extends AsyncTask<Void, DataPoint[], Boolean> {
+    private RealDoubleFFT mFFTransformer;
+    private AudioRecord mAudioRecorder;
+    private DataPoint[] mDataPoints;
+    private int counter = 0;
+    private int mBlockSize = 441;
     int mSampleRate = TxRxActivity.mSampleRate;
     int mBufferSize, mBufferReadResult, mRxGain;
     int mChannelConfiguration = AudioFormat.CHANNEL_IN_MONO;
     int mAudioEncoding = AudioFormat.ENCODING_PCM_16BIT;
-    boolean mStarted = true;
-    short[] mBuffer;
-    double[] mTransformed;
-    SpectrumAnalyserInterface mSpectrumAnalyserInterface;
+    private boolean mStarted = true;
+    private short[] mBuffer;
+    private double[] mTransformed;
+    private SpectrumAnalyserInterface mSpectrumAnalyserInterface;
     public static final String TAG = "[ProjCD] SpecAnalyser";
 
 
-    public SpectrumAnalyser(int rxGain, SpectrumAnalyserInterface spectrumAnalyserInterface){
+    SpectrumAnalyser(int rxGain, SpectrumAnalyserInterface spectrumAnalyserInterface){
         this.mSpectrumAnalyserInterface = spectrumAnalyserInterface;
         this.mRxGain = rxGain;
     }

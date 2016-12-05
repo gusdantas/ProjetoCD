@@ -34,7 +34,7 @@ public class TxRxActivity extends AppCompatActivity implements View.OnClickListe
     StringBuilder mMessageRx;
     boolean mIsAsk = false;
 
-    double mF0MaxValue, mF0ActualValue, mF1MaxValue, mF1ActualValue = 0;
+    double mF0ActualValue, mF1ActualValue = 0;
     public int mChannel = 400;
     public int mBlockSize = 441;
     public static int mRxGain = 10;
@@ -124,10 +124,7 @@ public class TxRxActivity extends AppCompatActivity implements View.OnClickListe
                                 mF0Rx.setText(String.valueOf(mF0ActualValue));
                                 mF1ActualValue = values[0][mChannel + 1].getY();
                                 mF1Rx.setText(String.valueOf(mF1ActualValue));
-                                /*mF0MaxValue = Math.max(mF0MaxValue,mF0ActualValue);
-                                mF0RxMax.setText(String.valueOf(mF0MaxValue));
-                                mF1MaxValue = Math.max(mF1MaxValue,mF1ActualValue);
-                                mF1RxMax.setText(String.valueOf(mF1MaxValue));*/
+
                                 if (mF0ActualValue > 10) {
                                     mF0RxMax.setText(String.valueOf(mF0Counter++));
                                 } else if (mF1ActualValue > 10) {

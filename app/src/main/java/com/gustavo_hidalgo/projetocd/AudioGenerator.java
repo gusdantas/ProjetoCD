@@ -11,16 +11,16 @@ import android.os.Handler;
  * Created by hdant on 14/11/2016.
  */
 
-public class AudioGenerator {
+class AudioGenerator {
 
     private int sampleRate;
     private AudioTrack audioTrack;
 
-    public AudioGenerator(int sampleRate) {
+    AudioGenerator(int sampleRate) {
         this.sampleRate = sampleRate;
     }
 
-    public double[] getSineWave(int samples, int sampleRate, double frequencyOfTone){
+    double[] getSineWave(int samples, int sampleRate, double frequencyOfTone){
         double[] sample = new double[samples];
         for (int i = 0; i < samples; i++) {
             sample[i] = Math.sin(2 * Math.PI * i / (sampleRate/frequencyOfTone));
@@ -28,7 +28,7 @@ public class AudioGenerator {
         return sample;
     }
 
-    public byte[] get16BitPcm(double[] samples) {
+    private byte[] get16BitPcm(double[] samples) {
         byte[] generatedSound = new byte[2 * samples.length];
         int index = 0;
         for (double sample : samples) {
@@ -42,7 +42,7 @@ public class AudioGenerator {
         return generatedSound;
     }
 
-    public void createPlayer(){
+    void createPlayer(){
         audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
                 sampleRate, AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_16BIT, sampleRate,
@@ -51,12 +51,12 @@ public class AudioGenerator {
         audioTrack.play();
     }
 
-    public void writeSound(double[] samples) {
+    void writeSound(double[] samples) {
         byte[] generatedSnd = get16BitPcm(samples);
         audioTrack.write(generatedSnd, 0, generatedSnd.length);
     }
 
-    public void destroyAudioTrack() {
+    void destroyAudioTrack() {
         audioTrack.stop();
         audioTrack.release();
     }

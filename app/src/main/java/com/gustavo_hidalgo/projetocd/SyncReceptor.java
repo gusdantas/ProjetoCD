@@ -6,10 +6,10 @@ import java.util.TimerTask;
  * Created by hdant on 03/12/2016.
  */
 
-public class SyncReceptor extends TimerTask{
-    SyncReceptorInterface mSyncReceptorInterface;
+class SyncReceptor extends TimerTask{
+    private SyncReceptorInterface mSyncReceptorInterface;
 
-    public SyncReceptor(SyncReceptorInterface syncReceptorInterface){
+    SyncReceptor(SyncReceptorInterface syncReceptorInterface){
         this.mSyncReceptorInterface = syncReceptorInterface;
     }
 

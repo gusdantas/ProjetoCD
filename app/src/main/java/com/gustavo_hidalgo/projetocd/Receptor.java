@@ -14,22 +14,22 @@ import ca.uol.aig.fftpack.RealDoubleFFT;
  * Created by hdant on 19/11/2016.
  */
 
-public class Receptor extends AsyncTask<Void, DataPoint[], Boolean> {
-    RealDoubleFFT mFFTransformer;
-    AudioRecord mAudioRecorder;
-    DataPoint[] mDataPoints;
-    int counter = 0;
-    int mBufferSize, mBufferReadResult, mBlockSize, mRxGain;
+class Receptor extends AsyncTask<Void, DataPoint[], Boolean> {
+    private RealDoubleFFT mFFTransformer;
+    private AudioRecord mAudioRecorder;
+    private DataPoint[] mDataPoints;
+    private int counter = 0;
+    private int mBufferSize, mBufferReadResult, mBlockSize, mRxGain;
     int mChannelConfiguration = AudioFormat.CHANNEL_IN_MONO;
     int mAudioEncoding = AudioFormat.ENCODING_PCM_16BIT;
-    boolean mStarted = true;
-    short[] mBuffer;
-    double[] mTransformed;
-    ReceptorInterface mReceptorInterface;
+    private boolean mStarted = true;
+    private short[] mBuffer;
+    private double[] mTransformed;
+    private ReceptorInterface mReceptorInterface;
     public static final String TAG = "[ProjCD] Receptor";
 
 
-    public Receptor(int blockSize, int rxGain, ReceptorInterface receptorInterface){
+    Receptor(int blockSize, int rxGain, ReceptorInterface receptorInterface){
         this.mReceptorInterface = receptorInterface;
         this.mBlockSize = blockSize;
         this.mRxGain = rxGain;
