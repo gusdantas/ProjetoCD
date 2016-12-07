@@ -39,7 +39,7 @@ public class TxRxActivity extends AppCompatActivity implements View.OnClickListe
     public int mChannel = 400;
     public static int mRxGain = 10;
     public static final int mBlockSize = 441;
-    public static final int mSamples = 22050; //500ms
+    public static final int mSamples = 8820; //500ms
     public static final int mSampleRate = 44100;
     public static final int mBandRate = mSampleRate/2;
 
@@ -109,7 +109,7 @@ public class TxRxActivity extends AppCompatActivity implements View.OnClickListe
                                     }
                                     mF0Counter = mF1Counter = 0;
                                 }
-                            }), 0, 500);
+                            }), 0, (int)(mTxTime*1000));
                         }
 
                         @Override

@@ -127,7 +127,7 @@
             android:layout_weight="1"
             android:textAppearance="@android:style/TextAppearance.Material.Medium"
             android:maxLines="1"
-            android:maxLength="6" />
+            android:maxLength="8" />
     </LinearLayout>
 
     <Button
