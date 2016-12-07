@@ -37,8 +37,8 @@ public class TxRxActivity extends AppCompatActivity implements View.OnClickListe
 
     double mF0ActualValue, mF1ActualValue = 0;
     public int mChannel = 400;
-    public int mBlockSize = 441;
     public static int mRxGain = 10;
+    public static final int mBlockSize = 441;
     public static final int mSamples = 22050; //500ms
     public static final int mSampleRate = 44100;
     public static final int mBandRate = mSampleRate/2;
@@ -76,6 +76,8 @@ public class TxRxActivity extends AppCompatActivity implements View.OnClickListe
         mF0fsk = (mBandRate/mBlockSize) * (mChannel-1);
         mF1fsk = (mBandRate/mBlockSize) * (mChannel+1);
         mTxTime = (double) mSamples/mSampleRate;
+        String timeSymbol = "Ts = "+String.valueOf(mTxTime);
+        mTxTimeTv.setText(timeSymbol);
         updateUI();
 
         mModeSelection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -153,17 +155,20 @@ public class TxRxActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void updateUI() {
+        //String channel = "Canal = "+String.valueOf(mChannel);
         mChannelEditText.setText(String.valueOf(mChannel));
-        mBlkSizeTextView.setText(String.valueOf(mBlockSize));
+        //String rxGain = "Ganho RX = "+String.valueOf(mRxGain);
         mRxGainEditText.setText(String.valueOf(mRxGain));
         if(mIsAsk){
-            mF0Tx.setText(String.valueOf(mFask));
+            String freq = "F = "+String.valueOf(mFask);
+            mF0Tx.setText(freq);
             mF1Tx.setText("-");
         } else {
-            mF0Tx.setText(String.valueOf(mF0fsk));
-            mF1Tx.setText(String.valueOf(mF1fsk));
+            String f0 = "F0 = "+String.valueOf(mF0fsk);
+            mF0Tx.setText(f0);
+            String f1 = "F1 = "+String.valueOf(mF1fsk);
+            mF1Tx.setText(f1);
         }
-        mTxTimeTv.setText(String.valueOf(mTxTime));
     }
 
     public void tx (int[] message){
@@ -208,7 +213,6 @@ public class TxRxActivity extends AppCompatActivity implements View.OnClickListe
                     mMessageTx[i] = Integer.parseInt(split[i+1]);
                 }
                 mChannel = Integer.parseInt(mChannelEditText.getText().toString());
-                mBlockSize = Integer.parseInt(mBlkSizeTextView.getText().toString());
                 mRxGain = Integer.parseInt(mRxGainEditText.getText().toString());
                 mFask = (mBandRate/mBlockSize) * mChannel;
                 mF0fsk = (mBandRate/mBlockSize) * (mChannel-1);

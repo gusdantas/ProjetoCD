@@ -61,12 +61,13 @@
             android:text="RX Gain" />
 
         <TextView
-            android:text="Block size"
+            android:text="441 canais"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:id="@+id/blockSize_textView"
             android:layout_weight="1"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            android:gravity="center_vertical" />
 
     </LinearLayout>
 
@@ -106,7 +107,7 @@
             android:layout_weight="1"
             android:textAppearance="@android:style/TextAppearance.Material.Medium"
             android:maxLines="1"
-            android:maxLength="6" />
+            android:maxLength="11" />
 
         <TextView
             android:text="F1"
@@ -116,7 +117,7 @@
             android:layout_weight="1"
             android:textAppearance="@android:style/TextAppearance.Material.Medium"
             android:maxLines="1"
-            android:maxLength="6" />
+            android:maxLength="11" />
 
         <TextView
             android:text="Bit TX time"
