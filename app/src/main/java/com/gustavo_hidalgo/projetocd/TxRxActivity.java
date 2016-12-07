@@ -18,12 +18,13 @@ import java.util.ArrayList;
 import java.util.Timer;
 
 public class TxRxActivity extends AppCompatActivity implements View.OnClickListener {
-    EditText mMessageTxEditText, mChannelEditText, mBlkSizeEditText, mRxGainEditText;
+    EditText mMessageTxEditText, mChannelEditText, mRxGainEditText;
     RadioButton mModeSelected;
     RadioGroup mModeSelection;
     Button mTxButton, mMessageButton;
     ToggleButton mRxButton;
-    TextView mMessageRxTextView, mF0Tx, mF1Tx, mTxTimeTv, mF0Rx, mF0RxMax, mF1Rx, mF1RxMax;
+    TextView mMessageRxTextView, mF0Tx, mF1Tx, mTxTimeTv, mF0Rx, mF0RxMax, mF1Rx, mF1RxMax,
+            mBlkSizeTextView;
     AudioGenerator mAudioGenerator;
     ArrayList<double[]> mMessageModulated;
     Receptor mReceptor;
@@ -53,7 +54,7 @@ public class TxRxActivity extends AppCompatActivity implements View.OnClickListe
     private void initialize(){
         mModeSelection = (RadioGroup) findViewById(R.id.radioGroup);
         mChannelEditText = (EditText) findViewById(R.id.channel_editText);
-        mBlkSizeEditText = (EditText) findViewById(R.id.blockSize_editText);
+        mBlkSizeTextView = (TextView) findViewById(R.id.blockSize_textView);
         mRxGainEditText = (EditText) findViewById(R.id.rxGain_editText);
         mMessageTxEditText = (EditText) findViewById(R.id.messageTxEditText);
         mMessageButton = (Button) findViewById(R.id.message_button);
@@ -153,7 +154,7 @@ public class TxRxActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateUI() {
         mChannelEditText.setText(String.valueOf(mChannel));
-        mBlkSizeEditText.setText(String.valueOf(mBlockSize));
+        mBlkSizeTextView.setText(String.valueOf(mBlockSize));
         mRxGainEditText.setText(String.valueOf(mRxGain));
         if(mIsAsk){
             mF0Tx.setText(String.valueOf(mFask));
@@ -207,7 +208,7 @@ public class TxRxActivity extends AppCompatActivity implements View.OnClickListe
                     mMessageTx[i] = Integer.parseInt(split[i+1]);
                 }
                 mChannel = Integer.parseInt(mChannelEditText.getText().toString());
-                mBlockSize = Integer.parseInt(mBlkSizeEditText.getText().toString());
+                mBlockSize = Integer.parseInt(mBlkSizeTextView.getText().toString());
                 mRxGain = Integer.parseInt(mRxGainEditText.getText().toString());
                 mFask = (mBandRate/mBlockSize) * mChannel;
                 mF0fsk = (mBandRate/mBlockSize) * (mChannel-1);

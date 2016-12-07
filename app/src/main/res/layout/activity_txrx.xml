@@ -55,20 +55,18 @@
             android:layout_height="match_parent"
             android:inputType="number"
             android:ems="10"
-            android:id="@+id/blockSize_editText"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:text="Block Size" />
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:inputType="number"
-            android:ems="10"
             android:id="@+id/rxGain_editText"
             android:layout_weight="1"
             android:singleLine="true"
             android:text="RX Gain" />
+
+        <TextView
+            android:text="Block size"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/blockSize_textView"
+            android:layout_weight="1"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
     </LinearLayout>
 
